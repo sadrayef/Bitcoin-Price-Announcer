@@ -1,12 +1,132 @@
-Bitcoin Price Announcer is a Python script that retrieves the current Bitcoin price from the Coindesk API and provides an audible announcement of the price. The script is designed to be cross-platform, supporting Windows, macOS, and Linux operating systems.
+# ₿ Bitcoin Price Announcer
 
-Features:
+A lightweight cross-platform Python application that retrieves the latest Bitcoin price from the CoinGecko API and announces it using Google Text-to-Speech (gTTS).
 
-Fetches real-time Bitcoin price in USD using the Coindesk API.
-Converts the price information into a spoken message using Google Text-to-Speech (gTTS).
-Plays the audio output using platform-specific commands (start for Windows, afplay for macOS, mpg123 for Linux).
-Provides a robust and straightforward way to stay updated with Bitcoin's latest value audibly.
+The application continuously monitors the Bitcoin price, announces it aloud every five minutes, and runs until manually stopped.
 
-Simply run the script to get the latest Bitcoin price and hear it announced.
-The script handles errors related to API connectivity and unsupported operating systems gracefully.
-This project demonstrates how to integrate APIs, handle JSON data, and use text-to-speech functionalities across different platforms.
+---
+
+## Features
+
+- 📈 Fetches the latest Bitcoin price in USD
+- 🔊 Announces the price using text-to-speech
+- 🔄 Automatically updates every 5 minutes
+- 🌍 Cross-platform support
+  - Windows
+  - macOS
+  - Linux
+- ⚠️ Graceful network error handling
+- 🛑 Stops safely with `Ctrl + C`
+
+---
+
+## Demo
+
+![Terminal Demo](demo.png)
+
+---
+
+## Requirements
+
+- Python 3.9+
+- Internet connection
+
+Required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/Bitcoin-Price-Announcer.git
+```
+
+Navigate into the project:
+
+```bash
+cd Bitcoin-Price-Announcer
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Usage
+
+Run the application:
+
+```bash
+python btc_price.py
+```
+
+Example output:
+
+```text
+Bitcoin Price Announcer started.
+Press Ctrl+C to stop.
+
+Bitcoin's current price is 64,267.00 USD
+Next announcement in 5 minutes.
+```
+
+Terminate the application at any time using:
+
+```text
+Ctrl + C
+```
+
+---
+
+## Technologies Used
+
+- Python
+- Requests
+- Google Text-to-Speech (gTTS)
+- CoinGecko API
+
+---
+
+## Project Structure
+
+```
+Bitcoin-Price-Announcer
+│
+├── btc_price.py
+├── requirements.txt
+├── README.md
+├── assets/
+│   └── demo.png
+└── .gitignore
+```
+
+---
+
+## Future Improvements
+
+- Support multiple cryptocurrencies
+- User-configurable update interval
+- Desktop notifications
+- Price change alerts
+- Support for multiple currencies (EUR, GBP, etc.)
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+## Author
+
+Sadra
