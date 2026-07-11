@@ -1,40 +1,86 @@
-import sys
-import json
-import requests
-import os 
-from gtts import gTTS
+import time
 import platform
+import subprocess
+import requests
+from gtts import gTTS
+
+API_URL = "https://api.coingecko.com/api/v3/simple/price"
+OUTPUT_FILE = "btc_price.mp3"
+INTERVAL = 300  # 5 minutes
 
 
-#Call coindesk API
-try : 
-    r = requests.get("https://api.coindesk.com/v1/bpi/currentprice.json")
-    if r.status_code != 200 :
-        sys.exit("Failed to recieve correct respond from API server!")
-except : 
-    sys.exit("Failed to recieve correct respond from API server!")
+def get_bitcoin_price():
+    """Fetch the current Bitcoin price in USD."""
+
+    params = {
+        "ids": "bitcoin",
+        "vs_currencies": "usd"
+    }
+
+    response = requests.get(API_URL, params=params, timeout=10)
+    response.raise_for_status()
+
+    data = response.json()
+    return data["bitcoin"]["usd"]
 
 
-#Extract The Bitcoin price from response
-data = json.loads(r.text)
-btc_price = int(data["bpi"]["USD"]["rate_float"])
-result = f"Bitcoin's current price is {btc_price:.2f} USD"
+def generate_audio(message):
+    """Generate an MP3 containing the spoken message."""
+
+    tts = gTTS(text=message, lang="en")
+    tts.save(OUTPUT_FILE)
 
 
-print(result)
+def play_audio():
+    """Play the generated MP3 on the current operating system."""
 
-#Saving the result as a mp3 file
-tts = gTTS(text=result, lang='en')
-tts.save("btc_price.mp3")
+    system = platform.system()
 
-#Read result
-os_name = platform.system()
-if os_name == 'Windows':
-    os.system("start btc_price.mp3")
-elif os_name == 'Darwin':  # macOS
-    os.system("afplay btc_price.mp3")
-elif os_name == 'Linux':
-    os.system("mpg123 btc_price.mp3")
-else:
-    print("Unsupported operating system for audio playback.")
+    if system == "Windows":
+        subprocess.run(["start", OUTPUT_FILE], shell=True)
 
+    elif system == "Darwin":
+        subprocess.run(["afplay", OUTPUT_FILE])
+
+    elif system == "Linux":
+        subprocess.run(["mpg123", OUTPUT_FILE])
+
+    else:
+        print("Unsupported operating system.")
+
+
+def main():
+    print("Bitcoin Price Announcer started.")
+    print("Press Ctrl+C to stop.\n")
+
+    while True:
+        try:
+            price = get_bitcoin_price()
+
+            message = f"Bitcoin's current price is {price:,.2f} USD"
+
+            print(message)
+
+            generate_audio(message)
+            play_audio()
+
+            print(f"Next announcement in {INTERVAL // 60} minutes.\n")
+            
+
+            time.sleep(INTERVAL)
+
+        except KeyboardInterrupt:
+            print("\nBitcoin Price Announcer stopped.")
+            break
+
+        except requests.RequestException as e:
+            print(f"Network error: {e}")
+            time.sleep(30)
+
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+            time.sleep(30)
+
+
+if __name__ == "__main__":
+    main()
