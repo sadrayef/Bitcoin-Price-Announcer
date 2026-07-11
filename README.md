@@ -22,7 +22,7 @@ The application continuously monitors the Bitcoin price, announces it aloud ever
 
 ## Demo
 
-![Terminal Demo](demo.png)
+![Terminal Demo](Demo.png)
 
 ---
 
